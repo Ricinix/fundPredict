@@ -58,9 +58,9 @@ def main(code = fundCode):
 
     data = load_data(train_path)
     data_predict = load_data(predict_path)
-    x_label = np.array(data['date'].tolist() + data_predict['date'].tolist())
 
-    x_label = pd.to_datetime(x_label, infer_datetime_format=True)
+
+    # x_label = pd.to_datetime(x_label, infer_datetime_format=True)
     data['date'] = pd.to_datetime(data['date'], infer_datetime_format=True)
     data_predict['date'] = pd.to_datetime(data_predict['date'], infer_datetime_format=True)
 
@@ -85,20 +85,22 @@ def main(code = fundCode):
     data_predict['y'] = result
     data_predict.to_csv(predict_path, index=False)
 
-    y_predict = np.zeros(m)
-    for i in range(m):
-        print('正在跑第%d个样本...' % (i + 1))
-        theta = local_weighted_linear_reg(X, y, X[i])
-        y_predict[i] = X[i].dot(theta)
+    # y_predict = np.zeros(m)
+    # for i in range(m):
+    #     print('正在跑第%d个样本...' % (i + 1))
+    #     theta = local_weighted_linear_reg(X, y, X[i])
+    #     y_predict[i] = X[i].dot(theta)
 
-    y_predict = np.array((y_predict.tolist() + result.tolist()))
+    y_predict = result
+
+    x_label = data_predict['date']
 
     plt.figure(figsize=(18, 6))
     plt.xlabel("date")
     plt.ylabel('Net Asset Value')
     plt.plot(x_label, y_predict, c = 'b')
-    plt.scatter(x_label[:m], y, c = 'r', marker='o')
-    plt.savefig('.\\picture\\predict_%s' % fundCode)
+    # plt.scatter(x_label, y, c = 'r', marker='o')
+    plt.savefig('.\\picture\\predict2_%s' % fundCode)
     plt.show()
 
 
