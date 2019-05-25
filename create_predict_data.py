@@ -13,7 +13,7 @@ def main(code = fundCode, data_array = data['date']):
     data_pd = pd.DataFrame(data, index=range(3))
     data_pd['date'] = pd.to_datetime(data_pd['date'],infer_datetime_format=True)
     data_pd.to_csv('.\\data\\predict_%s.csv' % fundCode, index=False)
-
+    print("成功创建预测集")
 
 if __name__ == '__main__':
     main()

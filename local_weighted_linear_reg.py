@@ -58,18 +58,19 @@ def main(code = fundCode):
 
     data = load_data(train_path)
     data_predict = load_data(predict_path)
+    x_label = np.array(data['date'].tolist() + data_predict['date'].tolist())
+
+    x_label = pd.to_datetime(x_label, infer_datetime_format=True)
     data['date'] = pd.to_datetime(data['date'], infer_datetime_format=True)
     data_predict['date'] = pd.to_datetime(data_predict['date'], infer_datetime_format=True)
-    data_predict['date'] = (data_predict['date'] - data['date'].min()).dt.days + 1
-    data['date'] = (data['date'] - data['date'].min()).dt.days + 1
 
-    X = np.array(data['date'])
+    X = np.array((data['date'] - data['date'].min()).dt.days + 1)
     y = np.array(data['y'])
     m = X.shape[0]
     ones = np.ones(m)
     X = np.vstack((X, ones)).T
 
-    X_t = data_predict['date']
+    X_t = np.array((data_predict['date'] - data['date'].min()).dt.days + 1)
     m_t = X_t.shape[0]
 
     ones = np.ones(m_t)
@@ -90,13 +91,19 @@ def main(code = fundCode):
         theta = local_weighted_linear_reg(X, y, X[i])
         y_predict[i] = X[i].dot(theta)
 
-    y_predict = np.vstack((y_predict, result))
-    x_label = np.array(data['date'])
-    x_label = np.vstack((x_label, np.array(data_predict['date'])))
+    y_predict = np.array((y_predict.tolist() + result.tolist()))
 
-    plt.figure(figsize=(12, 6))
-    plt.xlabel("日期")
-    plt.ylabel('单位净值')
+    print(y_predict)
+    print(x_label)
+
+    plt.figure(figsize=(18, 6))
+    plt.xlabel("date")
+    plt.ylabel('Net Asset Value')
     plt.plot(x_label, y_predict, c = 'b')
-    plt.scatter(x_label, y, c = 'r', marker='o')
+    plt.scatter(x_label[:m], y, c = 'r', marker='o')
+    plt.savefig('.\\picture\\predict_%s' % fundCode)
     plt.show()
+
+
+if __name__ == '__main__':
+    main()
