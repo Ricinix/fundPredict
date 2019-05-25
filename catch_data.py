@@ -28,17 +28,18 @@ def reload_data(code):
 
 def get_totalcount():
     r = requests.get(url=url, headers=headers, params=params)
-    text = re.findall('\((.*?)\)', r.text)[0]
-    TotalCount = json.loads(text)['TotalCount']
+    text = re.findall('\((.*?)\)', r.text)[0] # find the dict
+    TotalCount = json.loads(text)['TotalCount'] # get the num of all the data
     return TotalCount
 
 
 def data_get(pageIndex):
     params['pageIndex'] = pageIndex
-    r = requests.get(url=url, headers=headers, params=params)
+    r = requests.get(url=url, headers=headers, params=params) # get the page you want
     text = re.findall('\((.*?)\)', r.text)[0]
-    history_list = json.loads(text)['Data']['LSJZList']
-    history_df = pd.DataFrame(history_list)  # 转化为df
+    history_list = json.loads(text)['Data']['LSJZList'] #get the list in the response
+    history_df = pd.DataFrame(history_list)  # change to dataframe
+    # drop the data that we don't need
     history_df = history_df.drop(columns=["ACTUALSYI", 'DTYPE', 'FHFCBZ', 'FHFCZ', 'FHSP', 'NAVTYPE', 'SDATE', 'SGZT', 'SHZT'])
     return history_df
 
@@ -46,9 +47,11 @@ def data_get(pageIndex):
 def main(code = fundCode):
     global fundCode
     if code != fundCode:
-        reload_data(code)
+        reload_data(code) # reload the requests' data if run from the run_all.py
     total_pages = math.ceil(get_totalcount()/20) + 1
     data = pd.DataFrame()
+
+    # download all the data with iterations
     for i in range(1,total_pages):
         print("catching page %d ..." % i)
         data_piece = data_get(i)

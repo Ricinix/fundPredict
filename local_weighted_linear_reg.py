@@ -43,7 +43,7 @@ def local_weighted_linear_reg(X, y, x_test, iterations = 70000, alpha = 0.000001
     start = time.time()
     for i in range(iterations):
         theta = run_steep_gradient_descent(X, y, alpha, theta, weights)
-        error = sum_of_square_error(X, y, theta, weights)
+        # error = sum_of_square_error(X, y, theta, weights)
         # print('At Iteration %d - Error is %.5f ' % (i + 1, error))
     time_temp = time.time() - start
     print('本次所花时间：%f秒' % time_temp)
@@ -92,9 +92,6 @@ def main(code = fundCode):
         y_predict[i] = X[i].dot(theta)
 
     y_predict = np.array((y_predict.tolist() + result.tolist()))
-
-    print(y_predict)
-    print(x_label)
 
     plt.figure(figsize=(18, 6))
     plt.xlabel("date")
