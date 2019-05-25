@@ -88,7 +88,7 @@ def main(code = fundCode):
     for i in range(m):
         print('正在跑第%d个样本...' % (i + 1))
         theta = local_weighted_linear_reg(X, y, X[i])
-        y[i] = X[i].dot(theta)
+        y_predict[i] = X[i].dot(theta)
 
     y_predict = np.vstack((y_predict, result))
     x_label = np.array(data['date'])
