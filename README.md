@@ -1,5 +1,5 @@
 # fundPredict
-可根据基金代码爬取基金历史数据再通过局部线性回归进行简单预测
+可根据基金代码爬取基金历史数据再通过局部加权线性回归进行简单预测
 
 Predict the fund with local weighted linear regression
 
